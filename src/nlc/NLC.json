@@ -1,0 +1,143 @@
+{   "name": "IBMcloudAlerts",
+    "version": "0.0.1",
+    "classes": [
+        {
+            "class": "alerts.help",
+            "emittarget": "alerts.help",
+            "texts": [
+				"I want help with application alerts.",
+		  		"Can you help me with app alerts?",
+		  		"How can I be notified about application events.",
+		  		"Please help me with problematic apps.",
+		  		"How can I learn about applications with problems.",
+		  		"help alerts"
+            ]
+        },
+        {
+            "class": "bluemix.app.problems",
+            "emittarget": "bluemix.app.problems",
+            "texts": [
+                "Show me this weeks problematic apps",
+                "What apps are showing problems today?",
+                "Are applications crashing lately?",
+				"Do I have apps with high CPU today?",
+				"Do I have applications with high Memory recently?"
+            ],
+			"parameters" : [
+				{
+					"name": "timeframe",
+					"type": "keyword",
+					"prompt": "OK. What is the timeframe do you want to see problems for *today* or *this week*?"
+				 }
+			 ]
+        },
+        {
+            "class": "bluemix.alerts.enable",
+            "emittarget": "bluemix.alerts.enable",
+            "texts": [
+                "start monitoring CPU",
+				"Watch application memory",
+                "Begin notifying if disk usage exceeds",
+				"start tracking app statistics"
+            ],
+			"parameters" : [
+				{
+					"name": "type",
+					"type": "keyword",
+					"prompt": "OK. What alert type do you want to be notified for *cpu*, *memory*, *disk*, *event*, or *all*?"
+				 }
+			 ]
+        },
+        {
+            "class": "bluemix.alerts.disable",
+            "emittarget": "bluemix.alerts.disable",
+            "texts": [
+                "stop monitoring my apps",
+				"Disable application alerts",
+                "End application problem notifications",
+				"stop tracking app problems"
+            ],
+			"parameters" : [
+				{
+					"name": "type",
+					"type": "keyword",
+					"prompt": "OK. What alert type do you want to disabled: *cpu*, *memory*, *disk*, *event*, or *all*?"
+				 }
+			 ]
+        },
+        {
+            "class": "bluemix.alerts.list",
+            "emittarget": "bluemix.alerts.list",
+            "texts": [
+                "Show my active alerts",
+				"Display the application alerts",
+                "List the current app alerts"
+            ]
+        },
+        {
+            "class": "bluemix.alerts.threshold",
+            "emittarget": "bluemix.alerts.threshold",
+            "texts": [
+                "Set alert threshold to",
+				"Alter monitoring threshold",
+                "Change monitoring threshold"
+            ],
+			"parameters" : [
+				{
+					"name": "thresholdType",
+					"type": "keyword",
+					"prompt": "OK. What threshold type do you want to set: *cpu*, *memory*, or *disk*?"
+				},
+				{
+					"name": "threshold",
+					"type": "number",
+					"prompt": "OK. What do you want to set the threshold to as a percentage? Just the number please."
+				}
+			 ]
+        },
+        {
+            "class": "bluemix.alerts.enableAndSet",
+            "emittarget": "bluemix.alerts.enableAndSet",
+            "texts": [
+                "Monitor my app with threshold alerts of",
+				"Enable threshold alerts at",
+                "Start alert monitoring with threshold"
+            ],
+			"parameters" : [
+				{
+					"name": "thresholdType",
+					"type": "keyword",
+					"prompt": "OK. What threshold type do you want to set: *cpu*, *memory*, or *disk*?"
+				},
+				{
+					"name": "threshold",
+					"type": "number",
+					"prompt": "OK. What do you want to set the threshold to as a percentage? Just the number please."
+				}
+			 ]
+        },
+        {
+            "class": "bluemix.alerts.app.enable",
+            "emittarget": "bluemix.alerts.app.enable",
+            "texts": [
+					"start monitoring my apps",
+					"Enable application alerts",
+					"Begin notifying me of application events"
+            ]
+        }
+    ],
+	"parameter.values" : [
+		{
+			"name": "timeframe",
+			"values": ["today", "this week"]
+		},
+		{
+			"name": "type",
+			"values": ["cpu", "memory", "disk", "event", "all"]
+		},
+		{
+			"name": "thresholdType",
+			"values": ["cpu", "memory", "disk"]
+		}
+	]
+}
