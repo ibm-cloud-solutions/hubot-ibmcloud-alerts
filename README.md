@@ -1,4 +1,5 @@
-
+[![Build Status](https://travis-ci.org/ibm-cloud-solutions/hubot-ibmcloud-alerts.svg?branch=master)](https://travis-ci.org/ibm-cloud-solutions/hubot-ibmcloud-alerts)
+[![Coverage Status](https://coveralls.io/repos/github/ibm-cloud-solutions/hubot-ibmcloud-alerts/badge.svg?branch=master)](https://coveralls.io/github/ibm-cloud-solutions/hubot-ibmcloud-alerts?branch=master)
 [![Dependency Status](https://dependencyci.com/github/ibm-cloud-solutions/hubot-ibmcloud-alerts/badge)](https://dependencyci.com/github/ibm-cloud-solutions/hubot-ibmcloud-alerts)
 [![npm](https://img.shields.io/npm/v/hubot-ibmcloud-alerts.svg?maxAge=2592000)](https://www.npmjs.com/package/hubot-ibmcloud-alerts)
 
