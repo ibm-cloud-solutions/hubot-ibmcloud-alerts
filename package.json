@@ -59,9 +59,9 @@
   ],
   "dependencies": {
     "hubot-ibmcloud-cognitive-lib": ">=0.0.19",
-    "hubot-cf-convenience": "0.0.4",
-    "hubot-ibmcloud-activity-emitter": "0.0.2",
-    "hubot-ibmcloud-utils": "0.0.6",
+    "hubot-cf-convenience": "latest",
+    "hubot-ibmcloud-activity-emitter": "latest",
+    "hubot-ibmcloud-utils": "latest",
     "dateformat": "^1.0.12",
     "elasticsearch": "^11.0.1",
     "i18n-2": "^0.6.3"
