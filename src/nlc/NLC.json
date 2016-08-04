@@ -3,7 +3,7 @@
     "classes": [
         {
             "class": "alerts.help",
-			"description": "Help with alerts for Bluemix applications",
+            "description": "Help with alerts for Bluemix applications",
             "emittarget": "alerts.help",
             "texts": [
 				"Help with application alerts.",
@@ -16,7 +16,7 @@
         },
         {
             "class": "bluemix.app.problems",
-			"description": "Show Bluemix applications with problems over a time period",
+            "description": "Show Bluemix applications with problems over a time period",
             "emittarget": "bluemix.app.problems",
             "texts": [
                 "Show me this weeks problematic apps",
@@ -35,7 +35,7 @@
         },
         {
             "class": "bluemix.alerts.enable",
-			"description": "Enable alerts for Bluemix applications",
+            "description": "Enable alerts for Bluemix applications",
             "emittarget": "bluemix.alerts.enable",
             "texts": [
                 "start monitoring CPU",
@@ -53,7 +53,7 @@
         },
         {
             "class": "bluemix.alerts.disable",
-			"description": "Disable alerts for Bluemix applications",
+            "description": "Disable alerts for Bluemix applications",
             "emittarget": "bluemix.alerts.disable",
             "texts": [
                 "stop monitoring my apps",
@@ -71,7 +71,7 @@
         },
         {
             "class": "bluemix.alerts.list",
-			"description": "Show active alerts for Bluemix apps",
+            "description": "Show active alerts for Bluemix apps",
             "emittarget": "bluemix.alerts.list",
             "texts": [
                 "Show my active alerts",
@@ -81,7 +81,7 @@
         },
         {
             "class": "bluemix.alerts.threshold",
-			"description": "Set alert threshold for Bluemix apps",
+            "description": "Set alert threshold for Bluemix apps",
             "emittarget": "bluemix.alerts.threshold",
             "texts": [
                 "Set alert threshold to",
@@ -103,7 +103,7 @@
         },
         {
             "class": "bluemix.alerts.enableAndSet",
-			"description": "Enable and set alert threshold for Bluemix apps",
+            "description": "Enable and set alert threshold for Bluemix apps",
             "emittarget": "bluemix.alerts.enableAndSet",
             "texts": [
                 "Monitor my app with threshold alerts of",
@@ -125,7 +125,7 @@
         },
         {
             "class": "bluemix.alerts.app.enable",
-			"description": "Enable alerts for Bluemix apps",
+            "description": "Enable alerts for Bluemix apps",
             "emittarget": "bluemix.alerts.app.enable",
             "texts": [
 					"start monitoring my apps",
