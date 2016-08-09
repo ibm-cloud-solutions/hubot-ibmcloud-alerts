@@ -12,7 +12,7 @@ nock.disableNetConnect();
 nock.enableNetConnect('localhost');
 const esearchResources = require(path.resolve(__dirname, 'resources/elasticsearch', 'esearch.resources.js'));
 
-const esearch_endpoint = 'http://estest';
+const esearch_endpoint = process.env.HUBOT_AUDIT_ENDPOINT;
 
 module.exports = {
 

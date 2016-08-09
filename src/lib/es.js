@@ -12,18 +12,21 @@
 
 var path = require('path');
 var TAG = path.basename(__filename);
+const url = require('url');
 
 const usage_index_name = 'hubotusage';
 const ACTIVITY_INITIALIZED = 'HUBOTBLUEMIX.ALERT.INITIALIZED';
 var elasticsearch = require('elasticsearch');
 
 var AUDIT_ENDPOINT = process.env.HUBOT_AUDIT_ENDPOINT;
+const groupId = process.env.group_id || 'DEFAULT_GROUP';
 
 let esHost;
 var esClient;
 
 function auditDisabled() {
-	var isDisabled = (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED && (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'TRUE' || process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'true'));
+	var isDisabled = (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED && (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'TRUE' ||
+		process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'true'));
 	var isNotDefined = !AUDIT_ENDPOINT;
 	return isDisabled || isNotDefined;
 }
@@ -35,10 +38,18 @@ function getClient(robot) {
 		AUDIT_ENDPOINT = process.env.HUBOT_AUDIT_ENDPOINT;
 		esHost = AUDIT_ENDPOINT;
 		if (esHost) {
+			const esUrl = url.parse(esHost);
 			esClient = new elasticsearch.Client({
-				host: esHost,
 				maxSockets: 1000,
-				requestTimeout: 60000
+				requestTimeout: 60000,
+				host: {
+					protocol: 'https',
+					host: esUrl.hostname,
+					port: 443,
+					headers: {
+						'X-HUBOT-AUTH-TOKEN': groupId
+					}
+				}
 			});
 		}
 		else {
@@ -63,7 +74,9 @@ function getContainerUUID() {
  */
 function initElasticsearch(robot) {
 	if (auditDisabled() || !getClient()) {
-		robot.logger.warning(`${TAG}: Auditing is disabled. To enable auditing, ensure HUBOT_AUDIT_ENDPOINT is defined and HUBOT_BLUEMIX_AUDIT_DISABLED is not set to true`);
+		robot.logger.warning(
+			`${TAG}: Auditing is disabled. To enable auditing, ensure HUBOT_AUDIT_ENDPOINT is defined and HUBOT_BLUEMIX_AUDIT_DISABLED is not set to true`
+		);
 		return;
 	}
 
