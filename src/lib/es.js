@@ -10,13 +10,15 @@
  */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 const url = require('url');
+const elasticsearch = require('elasticsearch');
 
 const usage_index_name = 'hubotusage';
+const usage_doc_type = 'UsageEntry';
 const ACTIVITY_INITIALIZED = 'HUBOTBLUEMIX.ALERT.INITIALIZED';
-var elasticsearch = require('elasticsearch');
+
 
 var AUDIT_ENDPOINT = process.env.HUBOT_AUDIT_ENDPOINT;
 const groupId = process.env.group_id || 'DEFAULT_GROUP';
@@ -99,6 +101,7 @@ function initBotActivity(robot) {
 
 module.exports = {
 	BOTACTIVITY_INDEX_NAME: usage_index_name,
+	BOTACTIVITY_DOC_TYPE: usage_doc_type,
 	initBotActivity,
 	getContainerUUID,
 	getClient,
