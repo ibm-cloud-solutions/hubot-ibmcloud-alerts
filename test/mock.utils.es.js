@@ -31,24 +31,24 @@ module.exports = {
 
 		// respond to es query request.  the request body will contain different keys (prob_nothing,prob_today,prob_week) for
 		// which the response will be different.
-		esScope.post('/hubotusage/_search?search_type=count', /prob_nothing/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /prob_nothing/)
 			.reply(200, esearchResources.es_query_prob_nothing);
-		esScope.post('/hubotusage/_search?search_type=count', /prob_today/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /prob_today/)
 			.reply(200, esearchResources.es_query_prob_today);
-		esScope.post('/hubotusage/_search?search_type=count', /prob_week/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /prob_week/)
 			.reply(200, esearchResources.es_query_prob_week);
-		esScope.post('/hubotusage/_search?search_type=count', /prob_invalid/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /prob_invalid/)
 			.reply(200, esearchResources.es_query_prob_invalid);
 
 		// respond to es query request.  the request body will contain different keys (nothing,today,week) for
 		// which the response will be different.
-		esScope.post('/hubotusage/_search?search_type=count', /nothing/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /nothing/)
 			.reply(200, esearchResources.es_query_nothing);
-		esScope.post('/hubotusage/_search?search_type=count', /untranslated_keys/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /untranslated_keys/)
 			.reply(200, esearchResources.es_query_untranslated_keys);
-		esScope.post('/hubotusage/_search?search_type=count', /today/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /today/)
 			.reply(200, esearchResources.es_query_today);
-		esScope.post('/hubotusage/_search?search_type=count', /week/)
+		esScope.post('/hubotusage/UsageEntry/_search?search_type=count', /week/)
 			.reply(200, esearchResources.es_query_week);
 	}
 };

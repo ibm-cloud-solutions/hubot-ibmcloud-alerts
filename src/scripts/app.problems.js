@@ -161,6 +161,7 @@ function getMostProblematic(robot, timeframe) {
 		robot.logger.info(`${TAG}: Asynch call to ES client search for index:${es.BOTACTIVITY_INDEX_NAME} with body:${queryBodyStr}.`);
 		es.getClient().search({
 			index: es.BOTACTIVITY_INDEX_NAME,
+			type: es.BOTACTIVITY_DOC_TYPE,
 			searchType: 'count',
 			body: app_problems_query
 		}).then((result) => {
