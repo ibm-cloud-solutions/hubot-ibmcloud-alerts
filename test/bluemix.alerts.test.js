@@ -214,22 +214,28 @@ describe('Interacting with Alerts commands via Reg Ex', function() {
 				]);
 				room.robot.on('ibmcloud.formatter', function(event) {
 					expect(event.attachments.length).to.eql(1);
-					expect(event.attachments[0].fallback).to.eql(i18n.__('app.alert.monitor.resource.fallback', 'runningApp'));
-					expect(event.attachments[0].fields.length).to.eql(1);
+					expect(event.attachments[0].title).to.eql(i18n.__('app.alert.monitor.resource.title', 'testApp1Name'));
+					expect(event.attachments[0].fallback).to.eql(i18n.__('app.alert.monitor.resource.fallback', 'testApp1Name'));
+					expect(event.attachments[0].text).to.eql(i18n.__('app.alert.monitor.resource.text.cpu.memory.disk', 'testApp1Name', 'testSpace'));
+					expect(event.attachments[0].fields.length).to.eql(2);
 					expect(event.attachments[0].fields[0].short).to.eql(false);
-					expect(event.attachments[0].fields[0].title).to.eql(i18n.__('app.alert.monitor.resource.app',
-						'runningApp'));
+					expect(event.attachments[0].fields[0].title).to.eql(i18n.__('app.alert.monitor.resource.instances'));
 					let alertText = i18n.__('app.alert.threshold.description', '0') + i18n.__('app.alert.threshold.cpu',
 							'99.51', '%') +
 						i18n.__('app.alert.threshold.memory', '100', '%') + i18n.__('app.alert.threshold.disk', '100', '%');
-					alertText = alertText.substr(0, alertText.length - 1); // remove last comma.
-
-					expect(event.attachments[0].fields[0].value).to.eql(
-						alertText);
-					expect(event.attachments[0].title).to.eql(i18n.__('app.alert.monitor.resource.title', 'testSpace'));
+					alertText = alertText.substr(0, alertText.length - 1) + '.'; // remove last comma.
+					expect(event.attachments[0].fields[0].value).to.eql(alertText);
+					expect(event.attachments[0].fields[1].short).to.eql(false);
+					expect(event.attachments[0].fields[1].title).to.eql(i18n.__('app.alert.monitor.resource.recommendations'));
+					let recText = i18n.__('app.command.or', 'app scale testApp1Name to 2 instances 1280 memory 1536 disk') +
+						i18n.__('app.command.or', 'app scale testApp1Name') +
+						i18n.__('app.command.last', 'app restart testApp1Name');
+					expect(event.attachments[0].fields[1].value).to.eql(recText);
 					done();
 				});
 				alertsRewire.__get__('monitorAppResources')(room.robot);
+			}).catch((error) => {
+				done(error);
 			});
 		});
 	});
