@@ -318,7 +318,7 @@ function enableAppEvents(contextKey, robot, space, res) {
 // Failures such as the app got stopped or delete will cause cf.Apps.getStats to be rejected.  In which case we log it, but don't
 // reject the returned promise.  That way the inability to retrieve a single apps stats wouldn't prevent us from processing
 // the stats of other apps.
-function getSingleAppStats(robot, spaceGuid, spaceName, appGuid, appName) {
+function getSingleAppStats(robot, spaceGuid, spaceName, appGuid, appName, app) {
 	return new Promise((resolve, reject) => {
 		var appStats = [];
 
@@ -340,19 +340,37 @@ function getSingleAppStats(robot, spaceGuid, spaceName, appGuid, appName) {
 					}
 				}
 
-				resolve(appStats);
+				resolve({app: app, appStats: appStats});
 			}).catch((reason) => {
 				robot.logger.warning(`${TAG}: Unable to retrieve stats from CF for app: ${appName}`);
 				robot.logger.warning(reason);
-				resolve(appStats);
+				resolve({app: app, appStats: appStats});
 			});
 		}
 		catch (error) {
 			robot.logger.error(`${TAG}: Unable to retrieve stats from CF for app: ${appName}`);
 			robot.logger.error(error);
-			resolve(appStats);
+			resolve({app: app, appStats: appStats});
 		}
 	});
+}
+
+function buildOverallMsgs(overallAppAlert, app, cpuViolation, memoryViolation, diskViolation) {
+	const INCREASE_INSTANCES = 1;
+	const INCREASE_MEMORY = 256;
+	const INCREASE_DISK = 512;
+
+	var textMsgId = 'app.alert.monitor.resource.text' + (cpuViolation ? '.cpu' : '') + (memoryViolation ? '.memory' : '') + (diskViolation ? '.disk' : '');
+	var textMsg = i18n.__(textMsgId, overallAppAlert.app_name, overallAppAlert.space_name);
+
+	var scaleCmd = `app scale ${app.name} to` + (cpuViolation ? ` ${app.instances + INCREASE_INSTANCES} instances` : '') + (memoryViolation ? ` ${app.memory + INCREASE_MEMORY} memory` : '') + (diskViolation ? ` ${app.disk_quota + INCREASE_DISK} disk` : '');
+	var simpleScaleCmd = `app scale ${app.name}`;
+	var simpleRestartCmd = `app restart ${app.name}`;
+	var recommendationMsg = i18n.__('app.command.or', scaleCmd) + i18n.__('app.command.or', simpleScaleCmd) + i18n.__('app.command.last', simpleRestartCmd);
+
+	overallAppAlert.textMsg = textMsg;
+	overallAppAlert.recommendationMsg = recommendationMsg;
+	return overallAppAlert;
 }
 
 // gets "thresholds alerts" describing any resource usage violation based on the thresholds in the provide space config.
@@ -367,15 +385,20 @@ function getThresholdAlerts(robot, spaceConfig) {
 					var appStatsPromises = [];
 					result.apps.forEach((app) => {
 						if (app.state === 'STARTED') {
-							appStatsPromises.push(getSingleAppStats(robot, spaceConfig.guid, spaceConfig.name, app.guid, app.name));
+							appStatsPromises.push(getSingleAppStats(robot, spaceConfig.guid, spaceConfig.name, app.guid, app.name, app));
 						}
 					});
 
 					robot.logger.info(`${TAG}: Async calls (Promise.all) using cf module to get stats for each app.`);
 					Promise.all(appStatsPromises).then((appStatsResults) => {
 						// appStatsResults is an array of arrays.  1 array per app (appStats) containing 1 element per instance (instanceStats).
-						appStatsResults.forEach((appStats) => {
-							appStats.forEach((instanceStats) => {
+						appStatsResults.forEach((appStatsResult) => {
+							let cpuViolation = false;
+							let memoryViolation = false;
+							let diskViolation = false;
+							let appOverallAlert;
+							let appThresholdAlerts = [];
+							appStatsResult.appStats.forEach((instanceStats) => {
 								// see if this instance violated any configured thresholds.
 								let description = i18n.__('app.alert.threshold.description', instanceStats.instance);
 								let violation = false;
@@ -384,6 +407,7 @@ function getThresholdAlerts(robot, spaceConfig) {
 									// Example of 32.9% when returned from CF: 0.3297024299452314
 									let percent_used = instanceStats.usage.cpu * 100;
 									if (percent_used > spaceConfig.alerts.cpu.threshold) {
+										cpuViolation = true;
 										violation = true;
 										description += i18n.__('app.alert.threshold.cpu', Math.round(percent_used * 100) / 100, '%');
 
@@ -399,6 +423,7 @@ function getThresholdAlerts(robot, spaceConfig) {
 								if (spaceConfig.alerts.memory.enabled && instanceStats.mem_quota && instanceStats.usage.mem) {
 									let percent_used = (instanceStats.usage.mem / instanceStats.mem_quota) * 100;
 									if (percent_used > spaceConfig.alerts.memory.threshold) {
+										memoryViolation = true;
 										violation = true;
 										description += i18n.__('app.alert.threshold.memory', Math.round(percent_used * 100) / 100, '%');
 										activity.emitBotActivity(robot, spaceConfig.res, {
@@ -413,6 +438,7 @@ function getThresholdAlerts(robot, spaceConfig) {
 								if (spaceConfig.alerts.disk.enabled && instanceStats.disk_quota && instanceStats.usage.disk) {
 									let percent_used = (instanceStats.usage.disk / instanceStats.disk_quota) * 100;
 									if (percent_used > spaceConfig.alerts.disk.threshold) {
+										diskViolation = true;
 										violation = true;
 										description += i18n.__('app.alert.threshold.disk', Math.round(percent_used * 100) / 100, '%');
 										activity.emitBotActivity(robot, spaceConfig.res, {
@@ -427,14 +453,31 @@ function getThresholdAlerts(robot, spaceConfig) {
 
 								if (violation) {
 									// At least 1 threshold was violated by this instance, so add alert to the results.
-									description = description.substr(0, description.length - 1); // remove last comma.
-									thresholdAlerts.push({
+									description = description.substr(0, description.length - 1) + '.'; // remove last comma and add period
+									appThresholdAlerts.push({
 										space_name: instanceStats.space_name,
 										app_name: instanceStats.name,
 										description: description
 									});
 								}
 							}); // end processing of an apps instanceStats
+
+							// Build an overall alert with recommendations on how to fix
+							if (cpuViolation || memoryViolation || diskViolation) {
+								appOverallAlert = {
+									space_name: spaceConfig.name,
+									app_name: appStatsResult.app.name
+								};
+								appOverallAlert = buildOverallMsgs(appOverallAlert, appStatsResult.app, cpuViolation, memoryViolation, diskViolation);
+							}
+
+							// Add app alert
+							if (appThresholdAlerts.length > 0) {
+								let appAlert = { thresholdAlerts: appThresholdAlerts };
+								appAlert.overallAlert = appOverallAlert;
+								thresholdAlerts.push(appAlert);
+							}
+
 						}); // end of each appStats
 
 						resolve(thresholdAlerts);
@@ -524,24 +567,31 @@ function monitorAppResources(robot) {
 		return new Promise((resolve, reject) => {
 			robot.logger.info(`${TAG}: Async call to getThresholdAlerts() for space:${spaceConfig.guid}`);
 			getThresholdAlerts(robot, spaceConfig).then((result) => {
-				result.forEach((alert) => {
-					let attachments = [];
-
-					attachments.push({
-						fallback: i18n.__('app.alert.monitor.resource.fallback', alert.app_name),
-						title: i18n.__('app.alert.monitor.resource.title', alert.space_name),
+				result.forEach((appAlert) => { // one per app
+					let attachment = {
+						title: i18n.__('app.alert.monitor.resource.title', appAlert.overallAlert.app_name),
+						fallback: i18n.__('app.alert.monitor.resource.fallback', appAlert.overallAlert.app_name),
+						text: appAlert.overallAlert.textMsg,
+						mrkdwn_in: ['text', 'fields'],
 						color: COLOR_RED,
 						fields: [{
-							title: i18n.__('app.alert.monitor.resource.app', alert.app_name),
-							value: alert.description,
+							title: i18n.__('app.alert.monitor.resource.instances'),
+							short: false
+						}, {
+							title: i18n.__('app.alert.monitor.resource.recommendations'),
+							value: appAlert.overallAlert.recommendationMsg,
 							short: false
 						}]
-					});
+					};
+
+					attachment.fields[0].value = appAlert.thresholdAlerts.map(function(alert){
+						return alert.description;
+					}).join('\n');
 
 					// Emit the app alert as an attachment
 					robot.emit('ibmcloud.formatter', {
 						response: spaceConfig.res,
-						attachments
+						attachments: [attachment]
 					});
 				});
 				resolve();
