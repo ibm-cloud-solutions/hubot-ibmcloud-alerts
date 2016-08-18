@@ -3,7 +3,7 @@
   "version": "0.0.19",
   "description": "hubot script for alerting user on IBM Cloud application events",
   "main": "index.js",
-  "respository": {
+  "repository": {
     "url": "https://github.com/ibm-cloud-solutions/hubot-ibmcloud-alerts",
     "type": "git"
   },
