@@ -21,8 +21,8 @@ A hubot script that allows monitoring of applications and enabling alerts
 Steps for adding this to your existing hubot:
 
 1. `cd` into your hubot directory
-2. Install the app management functionality with `npm install hubot-app-management --save`
-3. Add `hubot-app-management` to your `external-scripts.json`
+2. Install the app management functionality with `npm install hubot-ibmcloud-alerts --save`
+3. Add `hubot-ibmcloud-alerts` to your `external-scripts.json`
 4. Add the necessary environment variables:
 ```
 export HUBOT_BLUEMIX_API=<Bluemix API URL>
@@ -31,19 +31,17 @@ export HUBOT_BLUEMIX_SPACE=<Bluemix space>
 export HUBOT_BLUEMIX_USER=<Bluemix User ID>
 export HUBOT_BLUEMIX_PASSWORD=<Password for the Bluemix use>
 ```
-
 5. Start up your bot & off to the races!
 
 ## Commands
-- `hubot app help` - Show available commands for app management.
-- `hubot app delete [app]` - Delete an app.
-- `hubot app list` - List apps.
-- `hubot app logs [app]` - Show logs for an app.
-- `hubot app restage [app]` - Restage an app.
-- `hubot app scale [app] [num]` - Scale app to a number of instances.
-- `hubot app start [app]` - Start an app.
-- `hubot app status [app]` - Get status for an app.
-- `hubot app stop [app]` - Stop an app.
+
+- `hubot alert show|list` - Show status of alerting.
+- `hubot alert me when cpu|memory|disk exceeds x%` - Enable resource alert and set threshold.
+- `hubot alert turn on cpu|memory|disk|event|all` - Turns on alerts for specified resource.
+- `hubot alert turn off cpu|memory|disk|event|all` - Turns off alerts for specified resource.
+- `hubot alert change cpu|memory|disk threshold to x%` - Sets alert threshold for specified resource.
+- `hubot alert me when app events happen` - Enable alerts when events happen for any app in the active space.
+- `hubot app show me problems [today|this week]` - Show top 5 most problematic apps [today|this week] in the active space.
 
 ## Hubot Adapter Setup
 
