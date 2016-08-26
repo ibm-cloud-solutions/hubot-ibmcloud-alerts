@@ -1,0 +1,9 @@
+applications:
+- disk_quota: 128M
+  host: <<APP_HOST>>
+  name: <<APP_NAME>>
+  path: .
+  domain: mybluemix.net
+  instances: 1
+  memory: 128M
+  command: "node --expose-gc app.js"
