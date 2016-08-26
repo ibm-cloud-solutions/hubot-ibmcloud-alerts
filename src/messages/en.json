@@ -50,7 +50,7 @@
     "app.alert.monitor.events.fallback": "Event alert for app: %s",
     "app.alert.monitor.events.timestamp": "Timestamp",
     "app.alert.monitor.events.type": "Type",
-    "app.alert.monitor.events.space": "Tpace",
+    "app.alert.monitor.events.space": "Space",
     "app.alert.monitor.events.user": "User",
 
     "help.app.alert.change": "Sets alert threshold for specified resource.",
