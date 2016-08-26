@@ -184,13 +184,14 @@ function enableAlerts(contextKey, robot, space, type, res) {
 	}
 
 	if (res) {
-		let oldRoom = getRoom(spaceConfig.res);
-		let newRoom = getRoom(res);
+		let oldRoom = getRoom(robot, spaceConfig.res);
+		let newRoom = getRoom(robot, res);
 
 		if (oldRoom && newRoom && oldRoom !== newRoom) {
 			// user switch rooms.  tell old room that alerts for this space will go to the new room.
 			let message = i18n.__('app.alert.move.complete', spaceConfig.name, newRoom);
-			robot.emit('ibmcloud.formatter', { response: res, message: message});
+			robot.emit('ibmcloud.formatter', { response: spaceConfig.res, message: message}); // notify old room
+			robot.emit('ibmcloud.formatter', { response: res, message: message});  // notify new room
 		}
 
 		// res, ties back to room.  always send alerts to the latest room they were enabled in.
@@ -525,11 +526,15 @@ function getSpacesWithEnabledAlerts(alertContext, thresholdReq, alertType) {
 	return configs;
 }
 
-function getRoom(res) {
+function getRoom(robot, res) {
 	var room;
 
-	if (res && res.message && res.message.room) {
-		room = res.message.room;
+	if (robot && robot.adapter && robot.adapter.client && robot.adapter.client.rtm && robot.adapter.client.rtm.dataStore &&
+				res && res.message && res.message.room) {
+		var roomObj = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(res.message.room);
+		if (roomObj.name) {
+			room = roomObj.name;
+		}
 	}
 
 	return room;
