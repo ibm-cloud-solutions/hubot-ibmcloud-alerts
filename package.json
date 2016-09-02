@@ -51,9 +51,9 @@
   "peerDependencies": {
     "hubot": "^2.19.0",
     "hubot-cf-convenience": "latest",
-    "hubot-ibmcloud-activity-emitter": "latest",
+    "hubot-ibmcloud-activity-emitter": ">=0.0.3",
     "hubot-ibmcloud-cognitive-lib": "latest",
-    "hubot-ibmcloud-utils": "latest",
+    "hubot-ibmcloud-utils": ">=0.0.14",
     "i18n-2": "^0.6.3"
   },
   "engines": {
