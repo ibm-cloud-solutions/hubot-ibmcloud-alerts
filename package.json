@@ -1,6 +1,6 @@
 {
   "name": "hubot-ibmcloud-alerts",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "hubot script for alerting user on IBM Cloud application events",
   "main": "index.js",
   "repository": {
