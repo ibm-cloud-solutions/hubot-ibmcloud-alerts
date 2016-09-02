@@ -50,7 +50,7 @@
   },
   "peerDependencies": {
     "hubot": "^2.19.0",
-    "hubot-cf-convenience": "latest",
+    "hubot-cf-convenience": ">=0.0.13",
     "hubot-ibmcloud-activity-emitter": ">=0.0.3",
     "hubot-ibmcloud-cognitive-lib": ">=0.0.40",
     "hubot-ibmcloud-utils": ">=0.0.14",
