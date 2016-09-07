@@ -12,7 +12,7 @@ const expect = require('chai').expect;
 const mockUtils = require('./mock.utils.cf.js');
 const mockESUtils = require('./mock.utils.es.js');
 
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
@@ -57,7 +57,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Show my alerts'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Show my alerts'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.list', res, {});
 		});
 
@@ -68,7 +68,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Enable all alerts'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Enable all alerts'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.enable', res, {type: 'all'});
 		});
 
@@ -79,7 +79,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Enable alerts'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Enable alerts'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.enable', res, {});
 		});
 
@@ -90,7 +90,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Disable all alerts'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Disable all alerts'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.disable', res, {type: 'all'});
 		});
 
@@ -101,7 +101,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Disable alerts'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Disable alerts'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.disable', res, {});
 		});
 
@@ -113,7 +113,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Enable cpu threshold alerts at 10%'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Enable cpu threshold alerts at 10%'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.enableAndSet', res, {thresholdType: 'cpu', threshold: 10});
 		});
 
@@ -124,7 +124,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Enable cpu threshold alerts at 10%'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Enable cpu threshold alerts at 10%'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.enableAndSet', res, {threshold: 10});
 		});
 
@@ -135,7 +135,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Enable cpu threshold alerts at 10%'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Enable cpu threshold alerts at 10%'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.enableAndSet', res, {thresholdType: 'cpu'});
 		});
 
@@ -146,7 +146,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Set cpu alert threshold to 10%'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Set cpu alert threshold to 10%'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.threshold', res, {thresholdType: 'cpu', threshold: 10});
 		});
 
@@ -157,7 +157,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Set cpu alert threshold to 10%'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Set cpu alert threshold to 10%'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.threshold', res, {threshold: 10});
 		});
 
@@ -168,7 +168,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Set cpu alert threshold to 10%'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Set cpu alert threshold to 10%'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.threshold', res, {thresholdType: 'cpu'});
 		});
 
@@ -179,7 +179,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'start monitoring my apps'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'start monitoring my apps'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('bluemix.alerts.app.enable', res, {});
 		});
 	});
@@ -193,7 +193,7 @@ describe('Interacting with Alerts via Natural Language', function() {
 				done();
 			});
 
-			var res = { message: {text: 'Can you help me with app alerts?'}, user: {id: 'anId'}, response: room };
+			let res = { message: {text: 'Can you help me with app alerts?'}, user: {id: 'anId'}, response: room };
 			room.robot.emit('alerts.help', res, {});
 		});
 	});

@@ -15,7 +15,7 @@ const mockESUtils = require('./mock.utils.es.js');
 // Leverage rewire to gain access to internal functions.
 const rewire = require('rewire');
 
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.

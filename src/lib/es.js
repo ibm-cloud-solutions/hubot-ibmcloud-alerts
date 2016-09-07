@@ -20,16 +20,16 @@ const usage_doc_type = 'UsageEntry';
 const ACTIVITY_INITIALIZED = 'HUBOTBLUEMIX.ALERT.INITIALIZED';
 
 
-var AUDIT_ENDPOINT = process.env.HUBOT_AUDIT_ENDPOINT;
+let AUDIT_ENDPOINT = process.env.HUBOT_AUDIT_ENDPOINT;
 const groupId = process.env.group_id || 'DEFAULT_GROUP';
 
 let esHost;
-var esClient;
+let esClient;
 
 function auditDisabled() {
-	var isDisabled = (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED && (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'TRUE' ||
+	let isDisabled = (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED && (process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'TRUE' ||
 		process.env.HUBOT_BLUEMIX_AUDIT_DISABLED === 'true'));
-	var isNotDefined = !AUDIT_ENDPOINT;
+	let isNotDefined = !AUDIT_ENDPOINT;
 	return isDisabled || isNotDefined;
 }
 
