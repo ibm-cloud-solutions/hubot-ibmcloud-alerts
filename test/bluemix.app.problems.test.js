@@ -12,7 +12,7 @@ const expect = require('chai').expect;
 const mockUtils = require('./mock.utils.cf.js');
 const mockESUtils = require('./mock.utils.es.js');
 
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
@@ -72,7 +72,7 @@ describe('Testing problematic apps via Reg Ex', function() {
 		before(function() {
 			saveESUrl = process.env.HUBOT_AUDIT_ENDPOINT;
 			delete process.env.HUBOT_AUDIT_ENDPOINT;
-			var es = require('../src/lib/es');
+			let es = require('../src/lib/es');
 			es.clearClient();
 		});
 

@@ -22,15 +22,15 @@
  */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 // --------------------------------------------------------------
 // i18n (internationalization)
 // It will read from a peer messages.json file.  Later, these
 // messages can be referenced throughout the module.
 // --------------------------------------------------------------
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
@@ -68,8 +68,8 @@ const COLOR_RED = palette.negative;
 
 // determines the best color to use when showing event in slack.
 function getEventColor(event) {
-	var state = '';
-	var color = COLOR_NEUTRAL;
+	let state = '';
+	let color = COLOR_NEUTRAL;
 
 	if (event.metadata && event.metadata.request && event.metadata.request.state) {
 		state = event.metadata.request.state;
@@ -91,7 +91,7 @@ function getEventColor(event) {
 
 // a friendly description to represent the event.
 function getEventDescription(event) {
-	var description = '';
+	let description = '';
 
 	// covers app start/stop events.
 	if (event.metadata && event.metadata.request && event.metadata.request.state) {
@@ -126,7 +126,7 @@ function getEventDescription(event) {
 }
 
 function getEventActivityId(event) {
-	var activity_id = 'activity.app.event';
+	let activity_id = 'activity.app.event';
 
 	if (event.type === 'app.crash') {
 		activity_id = 'activity.app.crash';
@@ -148,7 +148,7 @@ function enableAlerts(contextKey, robot, space, type, res) {
 	type = type.trim().toLowerCase();
 
 	// get alert config for the space, create if needed.
-	var spaceConfig = alertContext.spaceConfig[space.guid];
+	let spaceConfig = alertContext.spaceConfig[space.guid];
 	if (!spaceConfig) {
 		spaceConfig = {
 			guid: space.guid,
@@ -205,7 +205,7 @@ function enableAlerts(contextKey, robot, space, type, res) {
 //  space: cf.activeSpace
 //  type: alert type. undefined means 'all'
 function disableAlerts(contextKey, robot, space, type) {
-	var responseText = '';
+	let responseText = '';
 	const alertContext = robot.brain.get(contextKey);
 
 	if (!type) {
@@ -213,7 +213,7 @@ function disableAlerts(contextKey, robot, space, type) {
 	}
 	type = type.trim().toLowerCase();
 
-	var spaceConfig = alertContext.spaceConfig[space.guid];
+	let spaceConfig = alertContext.spaceConfig[space.guid];
 	if (!spaceConfig) {
 		responseText = i18n.__('app.alert.disabled.no.alerts', space.name);
 	}
@@ -238,7 +238,7 @@ function disableAlerts(contextKey, robot, space, type) {
 }
 
 function listAlerts(contextKey, robot) {
-	var responseText = '';
+	let responseText = '';
 	const alertContext = robot.brain.get(contextKey);
 	const enabledConfigs = getSpacesWithEnabledAlerts(alertContext);
 
@@ -269,7 +269,7 @@ function listAlerts(contextKey, robot) {
 //  type: alert type.  cannot be all or undefined.
 //  threshold: caller must pass a #.  This method will check bounds.
 function configAlert(contextKey, robot, space, type, threshold) {
-	var responseText = '';
+	let responseText = '';
 	const alertContext = robot.brain.get(contextKey);
 
 	if (threshold < 1 || threshold > 100) {
@@ -295,7 +295,7 @@ function configAlert(contextKey, robot, space, type, threshold) {
 //  threshold: caller must pass a #.  This method will check bounds.
 //  res: Optional - only used by default context, to provide a way to tie back the asynchronous event notifications to the room where the alerts got enabled.
 function enableAndSet(contextKey, robot, space, type, threshold, res) {
-	var responseText = '';
+	let responseText = '';
 
 	if (threshold < 1 || threshold > 100) {
 		responseText += i18n.__('app.alert.enable.and.set.invalid', threshold, '%s');
@@ -321,7 +321,7 @@ function enableAppEvents(contextKey, robot, space, res) {
 // the stats of other apps.
 function getSingleAppStats(robot, spaceGuid, spaceName, appGuid, appName, app) {
 	return new Promise((resolve, reject) => {
-		var appStats = [];
+		let appStats = [];
 
 		try {
 			robot.logger.info(`${TAG}: Async call using cf module to get stats for appGuid:${appGuid}`);
@@ -361,13 +361,13 @@ function buildOverallMsgs(overallAppAlert, app, cpuViolation, memoryViolation, d
 	const INCREASE_MEMORY = 256;
 	const INCREASE_DISK = 512;
 
-	var textMsgId = 'app.alert.monitor.resource.text' + (cpuViolation ? '.cpu' : '') + (memoryViolation ? '.memory' : '') + (diskViolation ? '.disk' : '');
-	var textMsg = i18n.__(textMsgId, overallAppAlert.app_name, overallAppAlert.space_name);
+	let textMsgId = 'app.alert.monitor.resource.text' + (cpuViolation ? '.cpu' : '') + (memoryViolation ? '.memory' : '') + (diskViolation ? '.disk' : '');
+	let textMsg = i18n.__(textMsgId, overallAppAlert.app_name, overallAppAlert.space_name);
 
-	var scaleCmd = `app scale ${app.name} to` + (cpuViolation ? ` ${app.instances + INCREASE_INSTANCES} instances` : '') + (memoryViolation ? ` ${app.memory + INCREASE_MEMORY} memory` : '') + (diskViolation ? ` ${app.disk_quota + INCREASE_DISK} disk` : '');
-	var simpleScaleCmd = `app scale ${app.name}`;
-	var simpleRestartCmd = `app restart ${app.name}`;
-	var recommendationMsg = i18n.__('app.command.or', scaleCmd) + i18n.__('app.command.or', simpleScaleCmd) + i18n.__('app.command.last', simpleRestartCmd);
+	let scaleCmd = `app scale ${app.name} to` + (cpuViolation ? ` ${app.instances + INCREASE_INSTANCES} instances` : '') + (memoryViolation ? ` ${app.memory + INCREASE_MEMORY} memory` : '') + (diskViolation ? ` ${app.disk_quota + INCREASE_DISK} disk` : '');
+	let simpleScaleCmd = `app scale ${app.name}`;
+	let simpleRestartCmd = `app restart ${app.name}`;
+	let recommendationMsg = i18n.__('app.command.or', scaleCmd) + i18n.__('app.command.or', simpleScaleCmd) + i18n.__('app.command.last', simpleRestartCmd);
 
 	overallAppAlert.textMsg = textMsg;
 	overallAppAlert.recommendationMsg = recommendationMsg;
@@ -377,13 +377,13 @@ function buildOverallMsgs(overallAppAlert, app, cpuViolation, memoryViolation, d
 // gets "thresholds alerts" describing any resource usage violation based on the thresholds in the provide space config.
 function getThresholdAlerts(robot, spaceConfig) {
 	return new Promise((resolve, reject) => {
-		var thresholdAlerts = [];
+		let thresholdAlerts = [];
 
 		try {
 			robot.logger.info(`${TAG}: Async call using cf module to get summary for space:${spaceConfig.guid}`);
 			cf.Spaces.getSummary(spaceConfig.guid).then((result) => {
 				if (result.apps && result.apps.length) {
-					var appStatsPromises = [];
+					let appStatsPromises = [];
 					result.apps.forEach((app) => {
 						if (app.state === 'STARTED') {
 							appStatsPromises.push(getSingleAppStats(robot, spaceConfig.guid, spaceConfig.name, app.guid, app.name, app));
@@ -503,7 +503,7 @@ function getThresholdAlerts(robot, spaceConfig) {
 // 	thresholdReq - optional: indicates to only consider threshold alerts (used in case we expand in future)
 //  alertType - optional: only return configs that have a specific type of alert enabled.
 function getSpacesWithEnabledAlerts(alertContext, thresholdReq, alertType) {
-	var configs = [];
+	let configs = [];
 
 	for (let guid in alertContext.spaceConfig) {
 		let spaceConfig = alertContext.spaceConfig[guid];
@@ -527,11 +527,11 @@ function getSpacesWithEnabledAlerts(alertContext, thresholdReq, alertType) {
 }
 
 function getRoom(robot, res) {
-	var room;
+	let room;
 
 	if (robot && robot.adapter && robot.adapter.client && robot.adapter.client.rtm && robot.adapter.client.rtm.dataStore &&
 				res && res.message && res.message.room) {
-		var roomObj = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(res.message.room);
+		let roomObj = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(res.message.room);
 		if (roomObj.name) {
 			room = roomObj.name;
 		}
@@ -541,7 +541,7 @@ function getRoom(robot, res) {
 }
 
 function allAlertsDisabled(spaceConfig) {
-	var enabled = false;
+	let enabled = false;
 
 	for (let type in spaceConfig.alerts) {
 		let alert = spaceConfig.alerts[type];
@@ -567,8 +567,8 @@ function monitorAppResources(robot) {
 
 	// promise for the processing of each space.  These promises wouldn't be rejected, so that rescheduling
 	// wouldn't take place until processing of each space has completed regardless if 1 space fails to process.
-	var spacePromises = [];
-	var processSpace = function(spaceConfig) {
+	let spacePromises = [];
+	let processSpace = function(spaceConfig) {
 		return new Promise((resolve, reject) => {
 			robot.logger.info(`${TAG}: Async call to getThresholdAlerts() for space:${spaceConfig.guid}`);
 			getThresholdAlerts(robot, spaceConfig).then((result) => {

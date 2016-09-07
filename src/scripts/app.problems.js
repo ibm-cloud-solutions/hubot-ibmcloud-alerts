@@ -16,15 +16,15 @@
  */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 // --------------------------------------------------------------
 // i18n (internationalization)
 // It will read from a peer messages.json file.  Later, these
 // messages can be referenced throughout the module.
 // --------------------------------------------------------------
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
@@ -54,7 +54,7 @@ function getTrailingS(count) {
  * Create display string based upon the given counts.
  */
 function getDisplayString(probIndex, appName, crashCount, cpuCount, memoryCount, diskCount) {
-	var dispString = `\n${probIndex}. The \`${appName}\` application `;
+	let dispString = `\n${probIndex}. The \`${appName}\` application `;
 
 	// Add crash count with slack annotations to display string
 	if (crashCount > 0) {
@@ -70,8 +70,8 @@ function getDisplayString(probIndex, appName, crashCount, cpuCount, memoryCount,
 		dispString += 'had ';
 
 		// Figure out separating text to put before memory and disk counts
-		var memPreText = '';
-		var diskPreText = '';
+		let memPreText = '';
+		let diskPreText = '';
 		if (cpuCount > 0) {
 			if (memoryCount > 0) {
 				if (diskCount > 0) {
@@ -129,8 +129,8 @@ function getMostProblematic(robot, timeframe) {
 	}
 
 	return new Promise((resolve, reject) => {
-		var startTime = new Date();
-		var endTime = new Date();
+		let startTime = new Date();
+		let endTime = new Date();
 		let dispTimeframe = ' ' + timeframe;
 		if (!timeframe) {
 			startTime.setTime(0);
@@ -142,7 +142,7 @@ function getMostProblematic(robot, timeframe) {
 		}
 		else if (timeframe.indexOf('week') > -1) {
 			// 7 days from now.
-			var seven_days_in_ms = 1000 * 60 * 60 * 24 * 7;
+			let seven_days_in_ms = 1000 * 60 * 60 * 24 * 7;
 			startTime = new Date(startTime - seven_days_in_ms);
 		}
 
@@ -168,9 +168,9 @@ function getMostProblematic(robot, timeframe) {
 			if (result && result.aggregations && result.aggregations.app_problems && result.aggregations.app_problems.buckets) {
 				let buckets = result.aggregations.app_problems.buckets;
 				let problematicApps = '';
-				var problematicAppCount = 0;
+				let problematicAppCount = 0;
 
-				for (var i = 0; (i < buckets.length && problematicAppCount < MAX_PROBLEMATIC_APPS); i++) {
+				for (let i = 0; (i < buckets.length && problematicAppCount < MAX_PROBLEMATIC_APPS); i++) {
 					let bucket = buckets[i];
 					let appName = bucket.key;
 					let crashCount = 0;
@@ -179,7 +179,7 @@ function getMostProblematic(robot, timeframe) {
 					let diskThresholdViolationCount = 0;
 					if (bucket.app_activity_type && bucket.app_activity_type.buckets) {
 						let subbuckets = bucket.app_activity_type.buckets;
-						for (var j = 0; j < subbuckets.length; j++) {
+						for (let j = 0; j < subbuckets.length; j++) {
 							let subbucket = subbuckets[j];
 							if (subbucket.key === 'activity.app.crash') {
 								crashCount += subbucket.doc_count;
