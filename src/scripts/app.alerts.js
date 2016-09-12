@@ -408,46 +408,52 @@ function getThresholdAlerts(robot, spaceConfig) {
 									// Example of 32.9% when returned from CF: 0.3297024299452314
 									let percent_used = instanceStats.usage.cpu * 100;
 									if (percent_used > spaceConfig.alerts.cpu.threshold) {
+										let cpu_percentage = Math.round(percent_used * 100) / 100;
 										cpuViolation = true;
 										violation = true;
-										description += i18n.__('app.alert.threshold.cpu', Math.round(percent_used * 100) / 100, '%');
+										description += i18n.__('app.alert.threshold.cpu', cpu_percentage, '%');
 
 										activity.emitBotActivity(robot, spaceConfig.res, {
 											activity_id: 'activity.threshold.violation.cpu',
 											app_name: instanceStats.name,
 											app_guid: instanceStats.app_guid,
 											space_name: instanceStats.space_name,
-											space_guid: instanceStats.space_guid
+											space_guid: instanceStats.space_guid,
+											threshold_percentage: cpu_percentage
 										});
 									}
 								}
 								if (spaceConfig.alerts.memory.enabled && instanceStats.mem_quota && instanceStats.usage.mem) {
 									let percent_used = (instanceStats.usage.mem / instanceStats.mem_quota) * 100;
 									if (percent_used > spaceConfig.alerts.memory.threshold) {
+										let mem_percentage = Math.round(percent_used * 100) / 100;
 										memoryViolation = true;
 										violation = true;
-										description += i18n.__('app.alert.threshold.memory', Math.round(percent_used * 100) / 100, '%');
+										description += i18n.__('app.alert.threshold.memory', mem_percentage, '%');
 										activity.emitBotActivity(robot, spaceConfig.res, {
 											activity_id: 'activity.threshold.violation.memory',
 											app_name: instanceStats.name,
 											app_guid: instanceStats.app_guid,
 											space_name: instanceStats.space_name,
-											space_guid: instanceStats.space_guid
+											space_guid: instanceStats.space_guid,
+											threshold_percentage: mem_percentage
 										});
 									}
 								}
 								if (spaceConfig.alerts.disk.enabled && instanceStats.disk_quota && instanceStats.usage.disk) {
 									let percent_used = (instanceStats.usage.disk / instanceStats.disk_quota) * 100;
 									if (percent_used > spaceConfig.alerts.disk.threshold) {
+										let disk_percentage = Math.round(percent_used * 100) / 100;
 										diskViolation = true;
 										violation = true;
-										description += i18n.__('app.alert.threshold.disk', Math.round(percent_used * 100) / 100, '%');
+										description += i18n.__('app.alert.threshold.disk', disk_percentage, '%');
 										activity.emitBotActivity(robot, spaceConfig.res, {
 											activity_id: 'activity.threshold.violation.disk',
 											app_name: instanceStats.name,
 											app_guid: instanceStats.app_guid,
 											space_name: instanceStats.space_name,
-											space_guid: instanceStats.space_guid
+											space_guid: instanceStats.space_guid,
+											threshold_percentage: disk_percentage
 										});
 									}
 								}
